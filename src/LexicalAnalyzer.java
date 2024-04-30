@@ -9,16 +9,39 @@ public class LexicalAnalyzer {
 
     public static enum TokenType {
         NUMBER("[+-]?(?:0[bB][01]+|0[xX][0-9a-fA-F]+|0[0-7]*|[1-9][0-9]*|0)(?:\\.[0-9]+)?(?:[eE][-+]?[0-9]+)?"),
-        OPERATOR("<<=|>>=|\\+=|\\-=|\\*=|/=|&=|\\|=|\\^=|\\+\\+|--|==|!=|=>|=<|<=|>=|&&|\\|\\||<<|>>|[+\\-*/%<>&|^=]|#|<|>"),
-        STRINGFORMAT("%[ds]"),
-        KEYWORD("if|while|for|switch|case|default|break|continue|goto|sizeof|typedef|extern|static|register|const|" +
+        COMPARISON_OP("==|!=|>=|<=|>|<"), // Specific comparison operators before assignment operators
+        ASSIGNMENT_OP("="),
+
+        SCOPE_OP("::"),
+        COLON(":"),
+        SHIFT_OP("<<|>>"),
+        UNARY_OP("\\+\\+|--"),
+        ARITHMETIC_OP("[+\\-*/%]"),
+        BITWISE_OP("[<>&|^]"),
+        LOGICAL_OP("[=!&|]"),
+        HASH("#"),
+        RELATIONAL_OP("[<>]"),
+        LEFT_PAREN("\\("),
+        RIGHT_PAREN("\\)"),
+        LEFT_BRACKET("\\["),
+        RIGHT_BRACKET("\\]"),
+        LEFT_BRACE("\\{"),
+        RIGHT_BRACE("\\}"),
+        SEMICOLON(";"),
+        COMMA(","),
+        STRING_FORMAT("%[ds]"),
+        KEYWORD("if|while|std|bool|namespace|for|switch|case|default|break|continue|goto|sizeof|typedef|extern|static|register|const|" +
                 "volatile|" +
                 "return|auto|void|short|long|long long|signed|unsigned|float|double|struct|enum|do|else|char|" +
                 "int|void"),
+        STRING_LITERAL("\"[^\"]*\""),
 
+        CHARACTER_LITERAL("'.'"),
         ID("[a-zA-Z_][a-zA-Z0-9_]*(::[a-zA-Z_][a-zA-Z0-9_]*)*"),
-        STRINGLITERAL("\"[^\"]*\""),
-        CHARACTERLITERAL("'.'"),
+
+
+
+
         PUNCTUATION("[(){};,]");
 
         public final String pattern;
@@ -44,13 +67,10 @@ public class LexicalAnalyzer {
         @Override
         public String toString() {
             if (type == TokenType.ID && index != -1) {
-                return String.format("Token: <%s , %d>", type.name(), index);
-            } else if (type == TokenType.NUMBER)
-            {
-
+                return String.format("Token: <%s , (%d, %s)>", type.name(), index, data);
+            } else if (type == TokenType.NUMBER) {
                 return String.format("Token: <%s , %s value %s>", type.name(), isFloat ? "FLOAT" : "INTEGER", data);
-            } else
-            {
+            } else {
                 return String.format("Token: <%s , %s>", type.name(), data);
             }
         }
@@ -60,23 +80,15 @@ public class LexicalAnalyzer {
         ArrayList<Token> tokens = new ArrayList<>();
         StringBuilder tokenpatterns = new StringBuilder();
         for (TokenType tokenType : TokenType.values())
-            tokenpatterns.append(String.format("|(?<%s>%s)", tokenType.name(), tokenType.pattern));
+            tokenpatterns.append(String.format("|(%s)", tokenType.pattern));
         Pattern tokenPatterns = Pattern.compile(tokenpatterns.substring(1));
 
         Matcher matcher = tokenPatterns.matcher(input);
         while (matcher.find()) {
-            if (matcher.group(TokenType.NUMBER.name()) != null) {
-                String numberString = matcher.group(TokenType.NUMBER.name());
-                boolean isFloat = numberString.contains(".");
-
-                tokens.add(new Token(TokenType.NUMBER, numberString, -1, isFloat));
-            } else {
-                for (TokenType tokenType : TokenType.values())
-                {
-                    if (matcher.group(tokenType.name()) != null) {
-                        tokens.add(new Token(tokenType, matcher.group(tokenType.name()), -1, false));
-                        break;
-                    }
+            for (TokenType tokenType : TokenType.values()) {
+                if (matcher.group(tokenType.ordinal() + 1) != null) {
+                    tokens.add(new Token(tokenType, matcher.group(tokenType.ordinal() + 1), -1, false));
+                    break;
                 }
             }
         }
@@ -85,7 +97,7 @@ public class LexicalAnalyzer {
 
     private static final String FILE_PATH = "src/Lexical.c";
 
-    public void lexer() throws IOException {
+    public static void lexer() throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new FileReader(FILE_PATH));
         StringBuilder multilineComment = new StringBuilder();
         ArrayList<Token> symbolTable = new ArrayList<>();
@@ -148,13 +160,13 @@ public class LexicalAnalyzer {
         }
 
         for (Token token : symbolTable) {
-
             System.out.println("Symbol Table Token: <" + token.type.name() + " , " + token.data + "> Index: " + token.index);
-
         }
 
         bufferedReader.close();
     }
 
-
+    public static void main(String[] args) throws IOException {
+        lexer();
+    }
 }

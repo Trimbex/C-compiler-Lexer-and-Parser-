@@ -1,26 +1,25 @@
-#include <iostream>
-
-namespace Math {
-    int add(int a, int b) {
-        return a + b;
-    }
-
-    namespace Geometry {
-        const double PI = 3.14159;
-
-        double circleArea(double radius) {
-            return PI * radius * radius;
-        }
-    }
-}
+#include <stdio.h>
 
 int main() {
-    int result = Math::add(3, 4);
-    std::cout << "Result of addition: " << result << std::endl;
+    bool b;
 
-    double radius = 2.5;
-    double area = Math::Geometry::circleArea(radius);
-    std::cout << "Area of circle with radius " << radius << ": " << area << std::endl;
+    switch (2 == 1) {
+        case 1:
+            int num1 = 10.0;
+            int num2 = 20;
+            char c = 'a';
+            int sum = num1 + num2;
+            bool x = !b;
+
+            printf("Sum of %d and %d is %d\n", num1, num2, sum);
+
+            std::cout << "Hi";
+
+            break;
+        default:
+            // default case
+            break;
+    }
 
     return 0;
 }
