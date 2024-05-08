@@ -1,10 +1,7 @@
 #include <iostream>
 #include <iostream>
 
-int x = 33;
-int y;
-
-int z;
+typedef int x,y = 4;
 
 int main()
 {

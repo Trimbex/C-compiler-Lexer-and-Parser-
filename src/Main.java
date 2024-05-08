@@ -28,11 +28,11 @@ public class Main extends JFrame {
         JScrollPane inputScrollPane = new JScrollPane(inputTextArea);
         JScrollPane outputScrollPane = new JScrollPane(outputTextArea);
 
-        analyzeButton.addActionListener(_ -> {
+        analyzeButton.addActionListener(e -> {
             try {
                 analyzeInput();
             } catch (IOException ex) {
-                throw new RuntimeException(ex);
+                ex.printStackTrace(); // Or handle the exception in a more appropriate way
             }
         });
 
@@ -57,7 +57,7 @@ public class Main extends JFrame {
         redirectConsoleOutput();
 
         // Initialize file
-        file = new File("Compilers-Project/src/Lexical.c");
+        file = new File("src/Lexical.c");
 
         // Load content of file into inputTextArea
         loadFileContent();
@@ -93,7 +93,7 @@ public class Main extends JFrame {
         System.setOut(printStream);
     }
 
-    private static final String FILE_PATH = "Compilers-Project/src/Lexical.c";
+ //   private static final String FILE_PATH = "Compilers-Project/src/Lexical.c";
 
     private void analyzeInput() throws IOException {
         if (!outputTextArea.getText().isEmpty()) {
@@ -101,7 +101,7 @@ public class Main extends JFrame {
         }
 
         // Call the lexer method to tokenize the input text from inputTextArea
-        tokens = LexicalAnalyzer.lexer("Compilers-Project/src/Lexical.c");
+        tokens = LexicalAnalyzer.lexer("src/Lexical.c");
 
 
     }

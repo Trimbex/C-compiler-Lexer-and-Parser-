@@ -138,6 +138,7 @@ public class ParseTree {
 
         // Show the panel in a dialog
         showInDialog(panel);
+
         System.out.println("Parsing complete.");
 
     }
@@ -235,6 +236,12 @@ public class ParseTree {
 
                 advance(); // Consume the identifier token
 
+
+
+
+
+
+
                 if(match(LexicalAnalyzer.TokenType.LEFT_BRACKET))
                 {
 
@@ -249,11 +256,24 @@ public class ParseTree {
                 else if (match(LexicalAnalyzer.TokenType.LEFT_PAREN))
                 {
 
+
+
                     fun_declaration(decl);
                 } else {
-
+                    retract();
                     var_declaration(decl);
+
+
+
                 }
+
+                if(match(LexicalAnalyzer.TokenType.COMMA))
+                {
+
+                }
+
+
+
             } else {
                 // Error handling: Expected identifier after type specifier
                 System.err.println("Syntax error: Expecting identifier after type specifier");
@@ -639,37 +659,69 @@ public class ParseTree {
         TextInBox vardec = new TextInBox("Variable declaration",80,20);
         tree.addChild(parentNode,vardec);
 
-        // Check for optional initializer
-        if (match(LexicalAnalyzer.TokenType.ASSIGNMENT_OP))
-        {
-            tree.addChild(vardec,new TextInBox(getTokenData(),80,20));
+
+        if (match(LexicalAnalyzer.TokenType.ID)) {
+            TextInBox idtoken3 = new TextInBox("Identifier", 80, 20);
+            tree.addChild(vardec, idtoken3);
+            tree.addChild(idtoken3, new TextInBox(getTokenData(), 80, 20));
+
 
             advance();
 
-            if (match(LexicalAnalyzer.TokenType.BITWISE_OP)) {
-                tree.addChild(vardec,new TextInBox(getTokenData(),80,20));
+
+            // Check for optional initializer
+            if (match(LexicalAnalyzer.TokenType.ASSIGNMENT_OP)) {
+                tree.addChild(vardec, new TextInBox(getTokenData(), 80, 20));
+
                 advance();
-            } // e.g. int x = &address;
 
-            // Parse the expression for initialization
-            expression(vardec);
+                if (match(LexicalAnalyzer.TokenType.BITWISE_OP)) {
+                    tree.addChild(vardec, new TextInBox(getTokenData(), 80, 20));
+                    advance();
+                } // e.g. int x = &address;
+
+                // Parse the expression for initialization
+                expression(vardec);
 
 
-
-            // Check for semicolon
-            if (match(LexicalAnalyzer.TokenType.SEMICOLON)) {
-                tree.addChild(vardec,new TextInBox(getTokenData(),80,20));
+                // Check for semicolon
+                if (match(LexicalAnalyzer.TokenType.SEMICOLON)) {
+                    tree.addChild(vardec, new TextInBox(getTokenData(), 80, 20));
+                    advance();
+                } else {
+                    System.err.println("Syntax error: missing semicolon ");
+                    System.exit(0);
+                }
+            } else if (match(LexicalAnalyzer.TokenType.SEMICOLON)) {
+                tree.addChild(vardec, new TextInBox(getTokenData(), 80, 20));
                 advance();
-            } else {
-                System.err.println("Syntax error: Missing semicolon 1");
+            } else if(match(LexicalAnalyzer.TokenType.COMMA))
+            {
+                tree.addChild(parentNode, new TextInBox(getTokenData(), 80, 20));
+
+                advance();
+
+                if(match(LexicalAnalyzer.TokenType.KEYWORD) && !getTokenData().equals("static"))
+                {
+                    TextInBox keyword = new TextInBox("Identifier",80,20);
+                    tree.addChild(vardec,keyword);
+                    tree.addChild(keyword,new TextInBox(getTokenData(),80,20));
+                    advance();
+                }
+                else
+
+                {
+                    System.err.println("Syntax error: Expected a declaration");
+                    System.exit(0);
+                }
+
+                var_declaration(parentNode);
+            }
+            else
+            {
+                System.err.println("Syntax error: Missing semicolon ");
                 System.exit(0);
             }
-        } else if (match(LexicalAnalyzer.TokenType.SEMICOLON)) {
-            tree.addChild(vardec,new TextInBox(getTokenData(),80,20));
-            advance();
-        } else {
-            System.err.println("Syntax error: Missing semicolon 2");
-            System.exit(0);
         }
     }
 
