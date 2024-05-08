@@ -6,7 +6,8 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.ArrayList;
 
-public class Main extends JFrame {
+public class Main extends JFrame
+{
 
     ArrayList<LexicalAnalyzer.Token> tokens;
     private JTextArea inputTextArea;

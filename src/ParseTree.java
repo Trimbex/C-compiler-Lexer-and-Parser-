@@ -232,6 +232,7 @@ public class ParseTree {
             {
                 TextInBox idtoken3 = new TextInBox("Identifier",80,20);
                 tree.addChild(decl,idtoken3);
+                if(!match(LexicalAnalyzer.TokenType.SEMICOLON) && !match(LexicalAnalyzer.TokenType.COMMA))
                 tree.addChild(idtoken3,new TextInBox(getTokenData(),80,20));
 
                 advance(); // Consume the identifier token
@@ -259,7 +260,9 @@ public class ParseTree {
 
 
                     fun_declaration(decl);
-                } else {
+                }
+                else
+                {
                     retract();
                     var_declaration(decl);
 
@@ -708,6 +711,10 @@ public class ParseTree {
                     tree.addChild(keyword,new TextInBox(getTokenData(),80,20));
                     advance();
                 }
+                else if (match(LexicalAnalyzer.TokenType.ID))
+                {
+                    var_declaration(parentNode);
+                }
                 else
 
                 {
@@ -715,7 +722,7 @@ public class ParseTree {
                     System.exit(0);
                 }
 
-                var_declaration(parentNode);
+
             }
             else
             {
