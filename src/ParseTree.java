@@ -1505,6 +1505,7 @@ public class ParseTree {
 
         while (match(LexicalAnalyzer.TokenType.COMPARISON_OP) && tokens.get(currentTokenIndex).data.equals("||"))
         {
+            tree.addChild(parentNode,expressionnode);
             tree.addChild(expressionnode,new TextInBox(getTokenData(),80,20));
             advance(); // Consume the '||' token
 
@@ -1512,6 +1513,7 @@ public class ParseTree {
             if (match(LexicalAnalyzer.TokenType.ID) || match(LexicalAnalyzer.TokenType.NUMBER) || match(LexicalAnalyzer.TokenType.LEFT_PAREN)) {
                 // Valid token found, continue parsing the expression
                 logical_and_expression(expressionnode);
+               // expression(expressionnode);
             } else {
                 // Error handling: Expected identifier, number, or left parenthesis after logical OR operator
                 System.err.println("Syntax error: Expected identifier, number, or expression after logical OR operator");
@@ -1522,6 +1524,7 @@ public class ParseTree {
 
     private void logical_and_expression(TextInBox parentNode)
     {
+
         TextInBox expressionnode = new TextInBox("Logical AND Exp",80,20);
 
 

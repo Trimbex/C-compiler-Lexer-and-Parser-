@@ -2,13 +2,13 @@
 #include <iostream>
 
 
-bool x = 9 * 7 + x--;
+bool x = (1?1:0) || (1?0:1) ;
 int main()
 {
 
 
 
-if(x < 3)
+if(x || 3)
 {
 
 
