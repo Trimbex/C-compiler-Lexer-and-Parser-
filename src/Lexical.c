@@ -1,23 +1,20 @@
 #include <iostream>
 #include <iostream>
 
-typedef int x,y;
 
-int a[3];
-
+bool x = 9 * 7 + x--;
 int main()
 {
-if ( x == 1)
+
+
+
+if(x < 3)
 {
 
-for(int i = 4; i < 3; i++)
-{
- x = x + 1;
+
 }
 
 }
-}
-
 
 
 

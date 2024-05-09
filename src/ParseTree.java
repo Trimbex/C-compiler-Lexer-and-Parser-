@@ -1798,7 +1798,9 @@ public class ParseTree {
             else {
                 TextInBox idtoken2 = new TextInBox("Identifier",80,20);
                 tree.addChild(expressionnode,idtoken2);
+                retract();
                 tree.addChild(idtoken2,new TextInBox(getTokenData(),80,20));
+                advance();
                 // It's a regular identifier
                 currentTokenIndex = currentIndex; // Reset index
                 // Handle regular identifier logic here
