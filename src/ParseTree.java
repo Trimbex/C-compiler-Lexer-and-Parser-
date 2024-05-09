@@ -1754,7 +1754,8 @@ public class ParseTree {
            tree.addChild(expressionnode,new TextInBox(getTokenData(),100,20));
             advance(); // Consume the number token
             arrayretract = false;
-        } else if (match(LexicalAnalyzer.TokenType.LEFT_PAREN))
+        }
+        else if (match(LexicalAnalyzer.TokenType.LEFT_PAREN))
         {
             tree.addChild(expressionnode,new TextInBox(getTokenData(),100,20));
             advance(); // Consume the left parenthesis token
