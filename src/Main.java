@@ -40,7 +40,11 @@ public class Main extends JFrame
         createParseTree.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                createParseTree();
+                try {
+                    createParseTree();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
             }
         });
 
@@ -107,9 +111,14 @@ public class Main extends JFrame
 
     }
 
-    private void createParseTree() {
-        // Placeholder method for creating parse tree
-        (new ParseTree(tokens)).parse();
+    private void createParseTree() throws IOException {
+        // Create a new ParseTree object
+        ParseTree parseTree = new ParseTree(tokens);
+
+        // Parse the tokens to generate the parse tree
+        File file = new File("parse_tree.jpg");
+        parseTree.parse(file);
+        // No need to retrieve a JPanel, the parse method will handle displaying the tree
     }
 
     private void loadFileContent() {

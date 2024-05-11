@@ -5,7 +5,15 @@ import org.abego.treelayout.demo.TextInBoxNodeExtentProvider;
 import org.abego.treelayout.demo.swing.TextInBoxTreePane;
 import org.abego.treelayout.util.DefaultConfiguration;
 import org.abego.treelayout.util.DefaultTreeForTreeLayout;
-
+import javax.imageio.IIOImage;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
+import java.util.Iterator;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
@@ -77,36 +85,64 @@ public class ParseTree {
         tree.addChild(root,new TextInBox(childname,80,20));
     }
 
-    public void parse()
-    {
+    public void parse(File file) throws IOException {
         while (currentTokenIndex < tokens.size()) {
             declaration_list();
         }
-
-        tree.addChild(root,new TextInBox("EOF",80,20));
-
+        tree.addChild(root, new TextInBox("EOF", 80, 20));
 
         // Setup the tree layout configuration
         double gapBetweenLevels = 50;
         double gapBetweenNodes = 10;
         DefaultConfiguration<TextInBox> configuration = new DefaultConfiguration<>(gapBetweenLevels, gapBetweenNodes);
-
         // Create the NodeExtentProvider for TextInBox nodes
         TextInBoxNodeExtentProvider nodeExtentProvider = new TextInBoxNodeExtentProvider();
-
         // Create the layout
         TreeLayout<TextInBox> treeLayout = new TreeLayout<>(tree, nodeExtentProvider, configuration);
-
         // Create a panel that draws the nodes and edges
         TextInBoxTreePane panel = new TextInBoxTreePane(treeLayout);
-
         // Show the panel in a dialog
         showInDialog(panel);
 
-        System.out.println("Parsing complete.");
+        // Create a BufferedImage to hold the image of the parse tree
+        BufferedImage image = new BufferedImage(panel.getWidth(), panel.getHeight(), BufferedImage.TYPE_INT_RGB);
 
+        // Get the Graphics2D object from the BufferedImage
+        Graphics2D graphics = image.createGraphics();
+
+        // Set the background color to white
+        graphics.setColor(Color.WHITE);
+        graphics.fillRect(0, 0, image.getWidth(), image.getHeight());
+
+        // Draw the parse tree panel onto the BufferedImage
+        panel.paint(graphics);
+
+        // Dispose the Graphics2D object
+        graphics.dispose();
+
+        // Write the BufferedImage to the file as a JPG with highest quality
+        saveImageWithHighestQuality(image, file);
+
+        System.out.println("Parsing complete.");
     }
 
+    private void saveImageWithHighestQuality(BufferedImage image, File file) throws IOException {
+        // Get all the ImageWriters for JPG format
+        Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("jpg");
+        if (writers.hasNext()) {
+            ImageWriter writer = writers.next();
+            // Create an ImageWriteParam to control the compression quality
+            ImageWriteParam writeParam = writer.getDefaultWriteParam();
+            writeParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+            writeParam.setCompressionQuality(1.0f); // Highest quality
+            // Write the image to the file
+            try (ImageOutputStream outputStream = ImageIO.createImageOutputStream(file)) {
+                writer.setOutput(outputStream);
+                writer.write(null, new IIOImage(image, null, null), writeParam);
+                writer.dispose();
+            }
+        }
+    }
 
 
     private void advance() {
