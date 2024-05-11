@@ -26,7 +26,7 @@ public class LexicalAnalyzer
         BITWISE_OP("[<>&|^]"),
 
        // HASH("#"),
-        RELATIONAL_OP("[<>]"),
+       // RELATIONAL_OP("[<>]"),
         LEFT_PAREN("\\("),
         RIGHT_PAREN("\\)"),
         LEFT_BRACKET("\\["),

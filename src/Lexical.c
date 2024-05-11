@@ -1,5 +1,8 @@
 #include <iostream>
-#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
 
 
 bool bl = (1?1:0) || (1?0:1) ;
@@ -66,6 +69,7 @@ else
 {
  x = y;
 
+
 }
 
 
@@ -81,4 +85,18 @@ for ( int j = 2 ; j < 3 ; j--)
 
 
 
+
+
+// Token types
+typedef enum {
+    TOK_INT,
+    TOK_FLOAT,
+    TOK_PLUS,
+    TOK_MINUS,
+    TOK_MULTIPLY,
+    TOK_DIVIDE,
+    TOK_LPAREN,
+    TOK_RPAREN,
+    TOK_EOF
+};
 
