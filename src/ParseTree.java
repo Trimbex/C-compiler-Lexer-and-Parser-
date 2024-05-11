@@ -12,43 +12,7 @@ import java.util.List;
 
 /*
 """
-1. program → declaration_list
-2. declaration_list → declaration declaration_list | ε
-3. declaration → var_declaration | fun_declaration
-4. var_declaration → [KEYWORD] TYPE_SPECIFIER { BITWISE_OP } ID [ASSIGNMENT_OP expression] SEMICOLON
-5. fun_declaration → [KEYWORD] TYPE_SPECIFIER ID LEFT_PAREN param_list RIGHT_PAREN [compound_stmt | SEMICOLON]
-6. param_list → param { COMMA param }
-7. param → TYPE_SPECIFIER ID
-8. compound_stmt → LEFT_BRACE statement_list RIGHT_BRACE
-9. statement_list → statement statement_list | ε
-10. statement → if_statement | while_statement | do_while_statement | for_statement | return_statement | switch_statement | compound_stmt | declaration | assignment_statement | break_statement | continue_statement | switch_cases
-11. if_statement → "if" "(" expression ")" statement ["else" statement]
-12. expression → conditional_expression
-13. conditional_expression → logical_or_expression ["?" expression ":" expression]
-14. logical_or_expression → logical_and_expression { "||" logical_and_expression }
-15. logical_and_expression → equality_expression { "&&" equality_expression }
-16. equality_expression → relational_expression { ("==" | "!=") relational_expression }
-17. relational_expression → additive_expression { ("<" | "<=" | ">" | ">=") additive_expression }
-18. additive_expression → multiplicative_expression { ("+" | "-") multiplicative_expression }
-19. multiplicative_expression → unary_expression { ("*" | "/" | "%") unary_expression }
-20. unary_expression → primary_expression | ("+" | "-") unary_expression | unary_operator unary_expression
-21. primary_expression → NUMBER | ID | "(" expression ")" | function_call
-22. function_call → ID "(" [ args_opt ] ")"
-23. args_opt → args_list | ε
-24. args_list → expression { "," expression }
-25. while_statement → "while" "(" expression ")" statement
-26. do_while_statement → "do" statement "while" "(" expression ")" ";"
-27. for_statement → "for" "(" [ for_init_declaration ] ";" [ expression ] ";" [ for_update_exp ] ")" statement
-28. for_init_declaration → TYPE_SPECIFIER [ TYPE_SPECIFIER ] ID [ "=" expression ] ";"
-29. for_update_exp → ID [ UNARY_OP ]
-30. return_statement → "return" [ expression ] ";"
-31. switch_statement → "switch" "(" expression ")" "{" switch_cases "}"
-32. switch_cases → switch_case { switch_case } [ default_case ]
-33. switch_case → "case" expression ":" statement_list
-34. default_case → "default" ":" statement_list
-35. break_statement → "break" ";"
-36. continue_statement → "continue" ";"
-37. assignment_statement → ID [ASSIGNMENT_OP | COMPOUND_OP] expression SEMICOLON
+
 
 """
  */
@@ -232,15 +196,27 @@ public class ParseTree {
             {
                 TextInBox idtoken3 = new TextInBox("Identifier",80,20);
                 tree.addChild(decl,idtoken3);
+
                 if(!match(LexicalAnalyzer.TokenType.SEMICOLON) && !match(LexicalAnalyzer.TokenType.COMMA))
-                tree.addChild(idtoken3,new TextInBox(getTokenData(),80,20));
+                {
+                    tree.addChild(idtoken3,new TextInBox(getTokenData(),80,20));
+
+                }
+
 
                 advance(); // Consume the identifier token
 
 
 
 
+              /*  while(match(LexicalAnalyzer.TokenType.COMMA))
+                {
 
+                    tree.addChild(decl,idtoken3);
+                    tree.addChild(idtoken3,new TextInBox(getTokenData(),80,20));
+                    advance();
+
+                } */
 
 
                 if(match(LexicalAnalyzer.TokenType.LEFT_BRACKET))
@@ -270,10 +246,7 @@ public class ParseTree {
 
                 }
 
-                if(match(LexicalAnalyzer.TokenType.COMMA))
-                {
 
-                }
 
 
 
@@ -1654,7 +1627,7 @@ public class ParseTree {
     {
         TextInBox expressionnode = new TextInBox("Unary Exp",100,20);
 
-        if (match(LexicalAnalyzer.TokenType.ID) || match(LexicalAnalyzer.TokenType.NUMBER) || match(LexicalAnalyzer.TokenType.LEFT_PAREN))
+        if (match(LexicalAnalyzer.TokenType.ID) || match(LexicalAnalyzer.TokenType.NUMBER) || match(LexicalAnalyzer.TokenType.LEFT_PAREN) || match(LexicalAnalyzer.TokenType.CHARACTER_LITERAL) || match(LexicalAnalyzer.TokenType.STRING_LITERAL))
         {
 
             primary_expression(parentNode); // Parse primary expression
@@ -1817,6 +1790,22 @@ public class ParseTree {
                     unary_expression(expressionnode);
                 }
             }
+        }
+        else if(match(LexicalAnalyzer.TokenType.CHARACTER_LITERAL) || match(LexicalAnalyzer.TokenType.STRING_LITERAL))
+        {
+            if(match(LexicalAnalyzer.TokenType.CHARACTER_LITERAL))
+            {
+                TextInBox charc = new TextInBox("Character Literal",80,20);
+                tree.addChild(expressionnode,charc);
+                tree.addChild(charc,new TextInBox(getTokenData(),80,20));
+            }
+            else
+            {
+                TextInBox charc = new TextInBox("String Literal",80,20);
+                tree.addChild(expressionnode,charc);
+                tree.addChild(charc,new TextInBox(getTokenData(),80,20));
+            }
+            advance();
         }
     }
 

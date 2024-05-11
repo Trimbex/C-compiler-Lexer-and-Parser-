@@ -38,7 +38,7 @@ public class LexicalAnalyzer
         DOT("\\."),
       //  STRING_FORMAT("%[ds]"),
 
-        TYPE_SPECIFIER("int|float|char|double|short|long|signed|unsigned|void|String|bool"),
+        TYPE_SPECIFIER("int|float|char|double|short|long|signed|unsigned|void|string|bool"),
 
         KEYWORD("if|while|for|switch|case|default|break|continue|goto|sizeof|typedef|extern|static|const|volatile|return|auto|struct|enum|do|else"),
 
