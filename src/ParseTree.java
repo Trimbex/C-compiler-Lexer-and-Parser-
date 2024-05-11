@@ -1122,6 +1122,7 @@ public class ParseTree {
         TextInBox switchstmt = new TextInBox("Switch Statement",80,20);
         TextInBox keyword = new TextInBox("Keyword",80,20);
         tree.addChild(parentNode,switchstmt);
+        tree.addChild(switchstmt,keyword);
         tree.addChild(keyword,new TextInBox(getTokenData(),80,20));
         advance();
 
