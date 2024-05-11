@@ -1,102 +1,34 @@
 #include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <string.h>
+#include <iostream>
 
+int i,choice;
+char c,ch;
 
-bool bl = (1?1:0) || (1?0:1) ;
-int x = 40;
-int x = ++x;
-
-int a[2] = {1,3};
-
-enum akm 
-{
-ko,
-lm
+enum Weekday {
+    MONDAY,
+    TUESDAY ,
+    wednesday ,
+    THURSDAY,
+    FRIDAY,
+    SATURDAY,
+    SUNDAY
 };
-
-
-struct k
-{
- char name[50];
-    int age;
-    float height;
-};
-
-
-
-double k,l,m;
-
-int u = 4;
-
-
-char x ;
-
+int factorial(int n) {
+    if (n == 0) {
+        return 1;
+    }else {
+        return 0 ;
+    }
+}
 int main()
 {
-
-switch (expression)
- {
-case 1:
-{
-break;
+int x ;
+if ( x == 1){
+ x = x + 1 ;
 }
-case 2:
+// comment
+for(int i = 4; i < 3; i++)
 {
-break;
+ x = x + 1 ;
 }
 }
-
- char y = 'a';
-
-do
-{
-x = 56;
-y = y + 1;
-} while ( y < 100);
-
-
-if(x || 3)
-{
-  x += 3;
-
-} 
-
-else
-
-{
- x = y;
-
-
-}
-
-
-for(int i = 4; i < 2; i++)
-{
-for ( int j = 2 ; j < 3 ; j--)
-{
- a[i] = j;
-}
-}
-
-}
-
-
-
-
-
-// Token types
-typedef enum {
-    TOK_INT,
-    TOK_FLOAT,
-    TOK_PLUS,
-    TOK_MINUS,
-    TOK_MULTIPLY,
-    TOK_DIVIDE,
-    TOK_LPAREN,
-    TOK_RPAREN,
-    TOK_EOF
-};
-
